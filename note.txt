@@ -1,0 +1,6 @@
+(sublime 配置 python) https://zhuanlan.zhihu.com/p/115084926
+(ipython 教程) https://blog.csdn.net/qq_27825451/article/details/84320859
+(解决pip的版本冲突问题) https://blog.csdn.net/weixin_42533541/article/details/85275035
+(交互环境配置) https://blog.csdn.net/Eric_Blog_CSDN/article/details/79063585
+《python从入门到实践》 第12章pygame项目
+(流星动画)https://www.bilibili.com/read/cv11501557/

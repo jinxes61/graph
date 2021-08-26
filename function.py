@@ -1,6 +1,7 @@
 import pygame
 import sys
-from set import Settings
+import stars
+from sets import Settings
 
 def check_event(graph_set, screen):
 
@@ -10,7 +11,10 @@ def check_event(graph_set, screen):
             sys.exit()
 
 
-def upd_screen(graph_set, screen):
-
+def upd_screen(graph_set, screen, img):
     screen.fill(graph_set.bg_color)
+    screen.blit(img, (0, 0))
+    stars.drawstar(screen, graph_set)
     pygame.display.flip()
+
+    

@@ -1,0 +1,10 @@
+class Settings:
+
+    def __init__(self):
+        self.screen_size = (1080, 720)
+        self.bg_color = (255, 255, 255)
+
+        self.star_num = 5
+        self.star_speed = 2
+        self.star_build = 0
+        self.star_mov = 0
