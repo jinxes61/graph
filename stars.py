@@ -9,7 +9,6 @@ def addStar(graph_set):
     if len(star_pos) == graph_set.star_num:
         del(star_pos[0])
     star_pos.append({'x': random.randint(0, graph_set.screen_size[0] + 200), 'y': 0})
-    print(len(star_pos))
 
 def moving(graph_set):
     # move the stars
@@ -32,7 +31,7 @@ def Draw(screen):
             #get color
             star_color = (200 - 10 * k, 200 - 10 * k, 200 - 10 * k)
 
-            pygame.draw.line(screen, star_color, (p_x, p_y), (p_x + 1, p_y - 2), 1)
+            pygame.draw.aaline(screen, star_color, (p_x, p_y), (p_x + 1, p_y - 2), 1)
 
 
 def drawstar(screen, graph_set):

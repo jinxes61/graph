@@ -1,6 +1,8 @@
 import pygame
 import sys
 import stars
+import welcome
+import menu
 from sets import Settings
 
 def check_event(graph_set, screen):
@@ -15,6 +17,12 @@ def upd_screen(graph_set, screen, img):
     screen.fill(graph_set.bg_color)
     screen.blit(img, (0, 0))
     stars.drawstar(screen, graph_set)
+    
+    if graph_set.status == 0:
+        welcome.wel(graph_set, screen)
+    elif graph_set.status == 1:
+        menu.Menu(graph_set, screen)
+
     pygame.display.flip()
 
     
