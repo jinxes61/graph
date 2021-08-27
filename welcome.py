@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 def draw_title(screen):
     #Title of the program
@@ -58,6 +59,9 @@ def check_button(graph_set, screen):
             mouse = pygame.mouse.get_pos()
             if x + w > mouse[0] > x and y + h > mouse[1] > y:
                 graph_set.status += 1;
+
+        if event.type == pygame.QUIT:
+            sys.exit()
     
 def wel(graph_set, screen):
     draw_title(screen)
