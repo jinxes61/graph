@@ -16,3 +16,9 @@ class Settings:
 
         #sets of button
         self.button_pos = (480, 450, 120, 50)
+
+        #sets of graph
+        self.node_num = 4
+        self.node_r = 20
+        self.graph_bg = (500, 130, 500, 520)
+        self.node_moving = 10

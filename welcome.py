@@ -1,6 +1,7 @@
 import pygame
 import sys
 
+#draw title
 def draw_title(screen):
     #Title of the program
     ft = pygame.font.Font("font/comic.ttf", 54)
@@ -14,6 +15,8 @@ def draw_title(screen):
 
     screen.blit(text, text_rect)
 
+
+#draw the 'start' button
 def draw_button(graph_set, screen):
     #get the mouse position
     mouse = pygame.mouse.get_pos()
@@ -46,6 +49,8 @@ def draw_button(graph_set, screen):
 
     screen.blit(text, text_rect)
 
+
+# check if the button is clicked
 def check_button(graph_set, screen):
     for event in pygame.event.get():
         if event.type == pygame.MOUSEBUTTONUP:
@@ -63,6 +68,8 @@ def check_button(graph_set, screen):
         if event.type == pygame.QUIT:
             sys.exit()
     
+
+#Welcome cover
 def wel(graph_set, screen):
     draw_title(screen)
     draw_button(graph_set, screen)
