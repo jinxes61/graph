@@ -2,6 +2,7 @@ import pygame
 import sets
 import random
 import sys
+from test_input import TextInput
 
 #get the length of two points
 def xylength(x1, y1, x2, y2):
@@ -38,14 +39,14 @@ def draw_nodeNums(graph_set, screen):
     else:
         pygame.draw.circle(screen, col, (150, 180), 20, 2)
         if xylength(mouse[0], mouse[1], 150, 180) <= 400:
-            pygame.draw.circle(surface, (80, 80, 80, 128), (150, 180), 18)
+            pygame.draw.circle(surface, (100, 100, 100, 128), (150, 180), 18)
 
     if graph_set.node_num == 9:
         pygame.draw.circle(screen, b_col, (350, 180), 20, 2)
     else:
         pygame.draw.circle(screen, col, (350, 180), 20, 2)
         if xylength(mouse[0], mouse[1], 350, 180) <= 400:
-            pygame.draw.circle(surface, (80, 80, 80, 128), (350, 180), 18)
+            pygame.draw.circle(surface, (100, 100, 100, 128), (350, 180), 18)
     screen.blit(surface, (0, 0))
 
     # '+' and '-' 
@@ -68,17 +69,79 @@ def draw_nodeNums(graph_set, screen):
 
 
 #draw the botton to add edges
-def draw_addEdge():
-    return
+def draw_addEdge(screen):
+    col = (220, 220, 220)
+    x = 20
+    y = 280
+    w = 200
+    h = 40
+    button_pos = (x, y, w, h)
+
+    mouse = pygame.mouse.get_pos()
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+        s = pygame.Surface((w - 2, h - 2))
+        s.set_alpha(128)
+        s.fill((100, 100, 100))
+        screen.blit(s, (x + 1, y + 1))
+    pygame.draw.rect(screen, col, button_pos, 2)
+
+    # text
+    ft = pygame.font.Font("font/comic.ttf", 28)
+    text = ft.render("add an edge", True, col)
+    text_rect = text.get_rect()
+    text_rect.center = (120, 300)
+    screen.blit(text, text_rect)
 
 
 #draw the botton to delete edges
-def draw_delEdge():
-    return
+def draw_delEdge(screen):
+    col = (220, 220, 220)
+    x = 240
+    y = 280
+    w = 220
+    h = 40
+    button_pos = (x, y, w, h)
+
+    mouse = pygame.mouse.get_pos()
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+        s = pygame.Surface((w - 2, h - 2))
+        s.set_alpha(128)
+        s.fill((100, 100, 100))
+        screen.blit(s, (x + 1, y + 1))
+    pygame.draw.rect(screen, col, button_pos, 2)
+
+    # botton
+    ft = pygame.font.Font("font/comic.ttf", 28)
+    text = ft.render("delete an edge", True, col)
+    text_rect = text.get_rect()
+    text_rect.center = (350, 300)
+    screen.blit(text, text_rect)
+
+
+# draw input
+def draw_input(graph_set, screen):
+    #output message
+    col = (220, 220, 220)
+    ft = pygame.font.Font("font/comic.ttf", 20)
+    text = ft.render("please input 3 numbers: node1  node2  length", True, col)
+    text_rect = text.get_rect()
+    text_rect.center = (250, 350)
+    screen.blit(text, text_rect)
+
+    #input bg
+    s = pygame.Surface((400, 40))
+    s.set_alpha(128)
+    s.fill((50, 50, 50))
+    screen.blit(s, (50, 380))
+
+    #text_input
+    txt = graph_set.txt
+    screen.blit(txt.get_surface(), (180, 380))
 
 
 # draw the nodes on the graph
 nodes_pos = []
+nodes_edges = []
 def draw_nodes(graph_set, screen):
     # num of nodes should be the same with setting
     graph_bg = graph_set.graph_bg
@@ -110,6 +173,15 @@ def draw_nodes(graph_set, screen):
         screen.blit(text, text_rect)
 
 
+# draw the edges between nodes
+def draw_edges(graph_set, screen):
+    for i in nodes_pos:
+        for j in nodes_edges:
+            pass
+    return
+
+
+# draw the graph
 def draw_graph(graph_set, screen):
     # background of the graph
     graph_bg = graph_set.graph_bg
@@ -125,6 +197,7 @@ def draw_graph(graph_set, screen):
 
     draw_nodes(graph_set, screen)
     
+
 # check if the button is clicked
 def check_button(graph_set, screen):
     mouse = pygame.mouse.get_pos()
@@ -138,6 +211,12 @@ def check_button(graph_set, screen):
                 graph_set.node_num -= 1
             if xylength(mouse[0], mouse[1], 350, 180) <= 400 and graph_set.node_num < 9:
                 graph_set.node_num += 1
+            if 220 > mouse[0] > 20 and 320 > mouse[1] > 280:
+                graph_set.add_or_del = 1
+                graph_set.txt = TextInput()
+            if 460 > mouse[0] > 240 and 320 > mouse[1] > 280:
+                graph_set.txt = TextInput()
+            
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             for i in nodes_pos:
@@ -154,9 +233,17 @@ def check_button(graph_set, screen):
                 nodes_pos[mov - 1]['x'] = mouse[0]
                 nodes_pos[mov - 1]['y'] = mouse[1]
 
+    graph_set.txt.update(pygame.event.get())
+
 
 #display the menu
 def Menu(graph_set, screen):
     draw_nodeNums(graph_set, screen)
     draw_graph(graph_set, screen)
+    draw_addEdge(screen)
+    draw_delEdge(screen)
+
+    if graph_set.add_or_del > 0:
+        draw_input(graph_set, screen)
+
     check_button(graph_set, screen)

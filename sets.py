@@ -1,3 +1,5 @@
+from test_input import TextInput
+
 class Settings:
 
     def __init__(self):
@@ -9,8 +11,8 @@ class Settings:
         self.status = 0
 
         #sets of stars
-        self.star_num = 5
-        self.star_speed = 2
+        self.star_num = 7
+        self.star_speed = 1
         self.star_build = 0
         self.star_mov = 0
 
@@ -22,3 +24,7 @@ class Settings:
         self.node_r = 20
         self.graph_bg = (500, 130, 500, 520)
         self.node_moving = 10
+
+        #sets of add or del nodes
+        self.add_or_del = 0
+        self.txt = TextInput()

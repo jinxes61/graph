@@ -6,3 +6,7 @@
 (背景流星动画)https://www.bilibili.com/read/cv11501557/
 (draw函数的使用)https://www.cnblogs.com/leonyoung/archive/2012/07/01/2572205.html
 (半透明图形绘制)http://www.voidcn.com/article/p-pvneetyc-btb.html
+(解决时钟问题)https://blog.csdn.net/KaiSarH/article/details/103184389
+(文本输入框)https://www.coder.work/article/354064
+(鼠标拖拽效果)https://www.cnblogs.com/ssxsy/p/9212291.html
+(pygame输入框模块)https://github.com/Nearoo/pygame-text-input

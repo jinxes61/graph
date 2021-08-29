@@ -37,14 +37,11 @@ def Draw(screen):
 def drawstar(screen, graph_set):
     #build a new star
     graph_set.star_build += 1;
-    if (graph_set.star_build == 150):
+    if (graph_set.star_build == 50):
         graph_set.star_build = 0
         addStar(graph_set)
 
     #moving stars
-    graph_set.star_mov += 1
-    if (graph_set.star_mov == 5):
-        graph_set.star_mov = 0
-        moving(graph_set)
+    moving(graph_set)
 
     Draw(screen)

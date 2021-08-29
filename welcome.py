@@ -35,7 +35,7 @@ def draw_button(graph_set, screen):
     if x + w > mouse[0] > x and y + h > mouse[1] > y:
         s = pygame.Surface((w - 4, h - 4))
         s.set_alpha(128)
-        s.fill((0, 0, 0))
+        s.fill((100, 100, 100))
         screen.blit(s, (x + 2, y + 2))
             
     #Text on the button

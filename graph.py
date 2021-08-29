@@ -13,7 +13,11 @@ def main():
     pygame.display.set_caption('Graph')
     img = pygame.image.load("img/bg.bmp")
 
+    #init clock
+    clock = pygame.time.Clock()
+
     while(True):
+        clock.tick(120)
         fun.check_event(graph_set, screen)
         fun.upd_screen(graph_set, screen, img)
 
