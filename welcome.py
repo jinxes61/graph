@@ -52,7 +52,8 @@ def draw_button(graph_set, screen):
 
 # check if the button is clicked
 def check_button(graph_set, screen):
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.MOUSEBUTTONUP:
             #check the mouse position
             button_pos = graph_set.button_pos

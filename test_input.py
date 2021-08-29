@@ -1,5 +1,3 @@
-import os.path
-
 import pygame
 import pygame.locals as pl
 
@@ -14,7 +12,7 @@ class TextInput:
     """
     def __init__(
             self,
-            initial_string="eg. 1  2  5",
+            initial_string="",
             font_family="font/comic.ttf",
             font_size=28,
             antialias=True,
@@ -22,7 +20,7 @@ class TextInput:
             cursor_color=(220, 220, 220),
             repeat_keys_initial_ms=400,
             repeat_keys_interval_ms=35,
-            max_string_length=10,
+            max_string_length=-1,
             password=False):
         """
         :param initial_string: Initial text to be displayed
@@ -43,9 +41,6 @@ class TextInput:
         self.max_string_length = max_string_length
         self.password = password
         self.input_string = initial_string  # Inputted text
-
-        if not os.path.isfile(font_family):
-            font_family = pygame.font.match_font(font_family)
 
         self.font_object = pygame.font.Font(font_family, font_size)
 
@@ -118,24 +113,20 @@ class TextInput:
                     )
                     self.cursor_position += len(event.unicode)  # Some are empty, e.g. K_UP
 
-            elif event.type == pl.KEYUP:
-                # *** Because KEYUP doesn't include event.unicode, this dict is stored in such a weird way
-                if event.key in self.keyrepeat_counters:
-                    del self.keyrepeat_counters[event.key]
 
         # Update key counters:
-        for key in self.keyrepeat_counters:
-            self.keyrepeat_counters[key][0] += self.clock.get_time()  # Update clock
+        # for key in self.keyrepeat_counters:
+        #     self.keyrepeat_counters[key][0] += self.clock.get_time()  # Update clock
 
-            # Generate new key events if enough time has passed:
-            if self.keyrepeat_counters[key][0] >= self.keyrepeat_intial_interval_ms:
-                self.keyrepeat_counters[key][0] = (
-                    self.keyrepeat_intial_interval_ms
-                    - self.keyrepeat_interval_ms
-                )
+        #     # Generate new key events if enough time has passed:
+        #     if self.keyrepeat_counters[key][0] >= self.keyrepeat_intial_interval_ms:
+        #         self.keyrepeat_counters[key][0] = (
+        #             self.keyrepeat_intial_interval_ms
+        #             - self.keyrepeat_interval_ms
+        #         )
 
-                event_key, event_unicode = key, self.keyrepeat_counters[key][1]
-                pygame.event.post(pygame.event.Event(pl.KEYDOWN, key=event_key, unicode=event_unicode))
+        #         event_key, event_unicode = key, self.keyrepeat_counters[key][1]
+        #         pygame.event.post(pygame.event.Event(pl.KEYDOWN, key=event_key, unicode=event_unicode))
 
         # Re-render text surface:
         string = self.input_string

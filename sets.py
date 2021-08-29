@@ -24,7 +24,9 @@ class Settings:
         self.node_r = 20
         self.graph_bg = (500, 130, 500, 520)
         self.node_moving = 10
+        self.nodes_edges = []
 
         #sets of add or del nodes
         self.add_or_del = 0
         self.txt = TextInput()
+        self.invalid = False

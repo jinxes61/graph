@@ -123,7 +123,10 @@ def draw_input(graph_set, screen):
     #output message
     col = (220, 220, 220)
     ft = pygame.font.Font("font/comic.ttf", 20)
-    text = ft.render("please input 3 numbers: node1  node2  length", True, col)
+    if graph_set.add_or_del == 1:
+        text = ft.render("please input 3 numbers: node1  node2  length", True, col)
+    else:
+        text = ft.render("please input 2 numbers: node1  node2", True, col)
     text_rect = text.get_rect()
     text_rect.center = (250, 350)
     screen.blit(text, text_rect)
@@ -139,9 +142,19 @@ def draw_input(graph_set, screen):
     screen.blit(txt.get_surface(), (180, 380))
 
 
+# draw the message that input is invalid
+def draw_invalid(graph_set, screen):
+    #output message
+    col = (220, 220, 220)
+    ft = pygame.font.Font("font/comic.ttf", 20)
+    text = ft.render("Input invalid!", True, col)
+    text_rect = text.get_rect()
+    text_rect.center = (250, 350)
+    screen.blit(text, text_rect)
+
+
 # draw the nodes on the graph
 nodes_pos = []
-nodes_edges = []
 def draw_nodes(graph_set, screen):
     # num of nodes should be the same with setting
     graph_bg = graph_set.graph_bg
@@ -152,11 +165,14 @@ def draw_nodes(graph_set, screen):
 
     while len(nodes_pos) > graph_set.node_num:
         del(nodes_pos[-1])
+        del(graph_set.nodes_edges[-1])
+
     while len(nodes_pos) < graph_set.node_num:
         xx = random.randint(x + 20, x + w - 20)
         yy = random.randint(y + 20, y + h - 20)
         num = len(nodes_pos)
         nodes_pos.append({'x': xx, 'y': yy, 'num': str(num + 1)})
+        graph_set.nodes_edges.append([])
 
     #draw
     col = (220, 220, 220)
@@ -175,9 +191,17 @@ def draw_nodes(graph_set, screen):
 
 # draw the edges between nodes
 def draw_edges(graph_set, screen):
-    for i in nodes_pos:
-        for j in nodes_edges:
-            pass
+    col = (220, 220, 220)
+
+    for i in range(0, graph_set.node_num):
+        for j in graph_set.nodes_edges[i]:
+            num = j['to']
+            if xylength(nodes_pos[i]['x'], nodes_pos[i]['y'], nodes_pos[num]['x'], nodes_pos[num]['y']) > 400:
+                pos1 = (nodes_pos[i]['x'], nodes_pos[i]['y'])
+                pos2 = (nodes_pos[num]['x'], nodes_pos[num]['y'])
+                pygame.draw.aaline(screen, col, pos1, pos2, 1)
+
+
     return
 
 
@@ -196,12 +220,86 @@ def draw_graph(graph_set, screen):
     screen.blit(s, (x, y))
 
     draw_nodes(graph_set, screen)
+    draw_edges(graph_set, screen)
     
+
+#tranverse string to num list
+def strToNum(s):
+    numbers = []
+    l = len(s)
+    i = 0
+    while i < l:
+        num = ''
+        symbol = s[i]
+        while '0' <= symbol <= '9': # symbol.isdigit()
+            num += symbol
+            i += 1
+            if i < l:
+                symbol = s[i]
+            else:
+                break
+        i += 1
+        if num != '':
+            numbers.append(int(num))
+    l = len(numbers)
+    for i in range(0, l):
+        numbers[i] -= 1
+    return numbers
+
+
+# action:add an edge
+def addEdge(graph_set, screen, numbers):
+    if (len(numbers) != 3):
+        graph_set.invalid = True
+        return
+    for i in graph_set.nodes_edges[numbers[0]]:
+        if i['to'] == numbers[1]:
+            graph_set.invalid = True
+            return
+
+    edge = {'to':numbers[1], 'len':numbers[2]}
+    graph_set.nodes_edges[numbers[0]].append(edge)
+    edge = {'to':numbers[0], 'len':numbers[2]}
+    graph_set.nodes_edges[numbers[1]].append(edge)
+
+
+# action del an edge
+def delEdge(graph_set, screen, numbers):
+    if (len(numbers) != 2):
+        graph_set.invalid = True
+        return
+
+    ans = -1
+    cnt = 0
+    for i in graph_set.nodes_edges[numbers[0]]:
+        if i['to'] == numbers[1]:
+            ans = cnt
+        else:
+            cnt += 1
+    if ans == -1:
+        graph_set.invalid = True
+        return
+    del (graph_set.nodes_edges[numbers[0]][ans])
+
+    ans = -1
+    cnt = 0
+    for i in graph_set.nodes_edges[numbers[1]]:
+        if i['to'] == numbers[0]:
+            ans = cnt
+        else:
+            cnt += 1
+    if ans == -1:
+        graph_set.invalid = True
+        return
+    del (graph_set.nodes_edges[numbers[1]][ans])
+    
+
 
 # check if the button is clicked
 def check_button(graph_set, screen):
     mouse = pygame.mouse.get_pos()
-    for event in pygame.event.get():
+    events = pygame.event.get()
+    for event in events:
         if event.type == pygame.QUIT:
             sys.exit()
 
@@ -213,9 +311,12 @@ def check_button(graph_set, screen):
                 graph_set.node_num += 1
             if 220 > mouse[0] > 20 and 320 > mouse[1] > 280:
                 graph_set.add_or_del = 1
-                graph_set.txt = TextInput()
+                graph_set.invalid = False
+                graph_set.txt = TextInput('eg. 1  2  5')
             if 460 > mouse[0] > 240 and 320 > mouse[1] > 280:
-                graph_set.txt = TextInput()
+                graph_set.add_or_del = 2
+                graph_set.invalid = False
+                graph_set.txt = TextInput('eg. 1  2')
             
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -233,7 +334,15 @@ def check_button(graph_set, screen):
                 nodes_pos[mov - 1]['x'] = mouse[0]
                 nodes_pos[mov - 1]['y'] = mouse[1]
 
-    graph_set.txt.update(pygame.event.get())
+    flag = False
+    flag = graph_set.txt.update(events)
+    if (flag == True):
+        num = strToNum(graph_set.txt.get_text())
+        if graph_set.add_or_del == 1:
+            addEdge(graph_set, screen, num)
+        elif graph_set.add_or_del == 2:
+            delEdge(graph_set, screen, num)
+        graph_set.add_or_del = 0
 
 
 #display the menu
@@ -245,5 +354,7 @@ def Menu(graph_set, screen):
 
     if graph_set.add_or_del > 0:
         draw_input(graph_set, screen)
+    if graph_set.invalid == True:
+        draw_invalid(graph_set, screen)
 
     check_button(graph_set, screen)
