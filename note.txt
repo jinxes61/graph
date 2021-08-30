@@ -10,3 +10,6 @@
 (文本输入框)https://www.coder.work/article/354064
 (鼠标拖拽效果)https://www.cnblogs.com/ssxsy/p/9212291.html
 (pygame输入框模块)https://github.com/Nearoo/pygame-text-input
+(pygame按键对应函数)https://www.jianshu.com/p/ffefa2af6d47
+(时间与帧率click)https://eyehere.net/2011/python-pygame-novice-professional-8/
+(解决按键不灵敏)https://www.zhihu.com/question/27776700

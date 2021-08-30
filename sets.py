@@ -22,7 +22,7 @@ class Settings:
         #sets of graph
         self.node_num = 4
         self.node_r = 20
-        self.graph_bg = (500, 130, 500, 520)
+        self.graph_bg = (520, 130, 520, 520)
         self.node_moving = 10
         self.nodes_edges = []
 

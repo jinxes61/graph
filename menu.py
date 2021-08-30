@@ -72,7 +72,7 @@ def draw_nodeNums(graph_set, screen):
 def draw_addEdge(screen):
     col = (220, 220, 220)
     x = 20
-    y = 280
+    y = 240
     w = 200
     h = 40
     button_pos = (x, y, w, h)
@@ -89,7 +89,7 @@ def draw_addEdge(screen):
     ft = pygame.font.Font("font/comic.ttf", 28)
     text = ft.render("add an edge", True, col)
     text_rect = text.get_rect()
-    text_rect.center = (120, 300)
+    text_rect.center = (120, 260)
     screen.blit(text, text_rect)
 
 
@@ -97,7 +97,7 @@ def draw_addEdge(screen):
 def draw_delEdge(screen):
     col = (220, 220, 220)
     x = 240
-    y = 280
+    y = 240
     w = 220
     h = 40
     button_pos = (x, y, w, h)
@@ -114,7 +114,7 @@ def draw_delEdge(screen):
     ft = pygame.font.Font("font/comic.ttf", 28)
     text = ft.render("delete an edge", True, col)
     text_rect = text.get_rect()
-    text_rect.center = (350, 300)
+    text_rect.center = (350, 260)
     screen.blit(text, text_rect)
 
 
@@ -128,18 +128,18 @@ def draw_input(graph_set, screen):
     else:
         text = ft.render("please input 2 numbers: node1  node2", True, col)
     text_rect = text.get_rect()
-    text_rect.center = (250, 350)
+    text_rect.center = (250, 310)
     screen.blit(text, text_rect)
 
     #input bg
     s = pygame.Surface((400, 40))
     s.set_alpha(128)
     s.fill((50, 50, 50))
-    screen.blit(s, (50, 380))
+    screen.blit(s, (50, 340))
 
     #text_input
     txt = graph_set.txt
-    screen.blit(txt.get_surface(), (180, 380))
+    screen.blit(txt.get_surface(), (180, 340))
 
 
 # draw the message that input is invalid
@@ -149,8 +149,22 @@ def draw_invalid(graph_set, screen):
     ft = pygame.font.Font("font/comic.ttf", 20)
     text = ft.render("Input invalid!", True, col)
     text_rect = text.get_rect()
-    text_rect.center = (250, 350)
+    text_rect.center = (250, 310)
     screen.blit(text, text_rect)
+
+
+def delAllEdges(graph_set, x):
+    for i in range(0, x):
+        ans = -1
+        cnt = 0
+        for j in graph_set.nodes_edges[i]:
+            if j['to'] == x:
+                ans = cnt
+            else:
+                cnt += 1
+
+        if ans != -1:
+            del (graph_set.nodes_edges[i][ans])
 
 
 # draw the nodes on the graph
@@ -164,6 +178,7 @@ def draw_nodes(graph_set, screen):
     h = graph_bg[3]
 
     while len(nodes_pos) > graph_set.node_num:
+        delAllEdges(graph_set, len(nodes_pos) - 1)
         del(nodes_pos[-1])
         del(graph_set.nodes_edges[-1])
 
@@ -203,7 +218,9 @@ def get_shorten_pos(pos1, pos2, r):
 
 # draw the edges between nodes
 def draw_edges(graph_set, screen):
+    txt_col = (100, 100, 100)
     col = (220, 220, 220)
+    ft = pygame.font.Font("font/ebrima.ttf", 20)
 
     for i in range(0, graph_set.node_num):
         for j in graph_set.nodes_edges[i]:
@@ -214,6 +231,13 @@ def draw_edges(graph_set, screen):
                 pos = get_shorten_pos(pos1, pos2, graph_set.node_r)
                 pygame.draw.aaline(screen, col, pos[0], pos[1], 1)
 
+                midx = (pos1[0] + pos2[0]) / 2
+                midy = (pos1[1] + pos2[1]) / 2 - 10
+                text = ft.render(str(j['len'] + 1), True, col)
+                text_rect = text.get_rect()
+                text_rect.centerx = midx
+                text_rect.centery = midy
+                screen.blit(text, text_rect)
 
     return
 
@@ -316,6 +340,58 @@ def delEdge(graph_set, screen, numbers):
     del (graph_set.nodes_edges[numbers[1]][ans])
     
 
+# draw the three button to change status
+def draw_buttons(screen):
+    col = (220, 220, 220)
+    mouse = pygame.mouse.get_pos()
+    
+    x = 40
+    y = 460
+    w = 430
+    h = 50
+    button_pos = (x, y, w, h)
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+        s = pygame.Surface((w - 2, h - 2))
+        s.set_alpha(128)
+        s.fill((100, 100, 100))
+        screen.blit(s, (x + 1, y + 1))
+    pygame.draw.rect(screen, col, button_pos, 2)
+
+    y = 540
+    button_pos = (x, y, w, h)
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+        s = pygame.Surface((w - 2, h - 2))
+        s.set_alpha(128)
+        s.fill((100, 100, 100))
+        screen.blit(s, (x + 1, y + 1))
+    pygame.draw.rect(screen, col, button_pos, 2)
+
+    y = 620
+    button_pos = (x, y, w, h)
+    if x + w > mouse[0] > x and y + h > mouse[1] > y:
+        s = pygame.Surface((w - 2, h - 2))
+        s.set_alpha(128)
+        s.fill((100, 100, 100))
+        screen.blit(s, (x + 1, y + 1))
+    pygame.draw.rect(screen, col, button_pos, 2)
+
+    # title
+    ft = pygame.font.Font("font/comic.ttf", 32)
+    text = ft.render("Adjacency List", True, col)
+    text_rect = text.get_rect()
+    text_rect.center = (250, 480)
+    screen.blit(text, text_rect)
+
+    text = ft.render("Minimum Spanning Tree", True, col)
+    text_rect = text.get_rect()
+    text_rect.center = (250, 560)
+    screen.blit(text, text_rect)
+
+    text = ft.render("Shortest Path", True, col)
+    text_rect = text.get_rect()
+    text_rect.center = (250, 640)
+    screen.blit(text, text_rect)
+
 
 # check if the button is clicked
 def check_button(graph_set, screen):
@@ -331,14 +407,20 @@ def check_button(graph_set, screen):
                 graph_set.node_num -= 1
             if xylength(mouse[0], mouse[1], 350, 180) <= 400 and graph_set.node_num < 9:
                 graph_set.node_num += 1
-            if 220 > mouse[0] > 20 and 320 > mouse[1] > 280:
+            if 220 > mouse[0] > 20 and 280 > mouse[1] > 240:
                 graph_set.add_or_del = 1
                 graph_set.invalid = False
                 graph_set.txt = TextInput('eg. 1  2  5')
-            if 460 > mouse[0] > 240 and 320 > mouse[1] > 280:
+            if 460 > mouse[0] > 240 and 280 > mouse[1] > 240:
                 graph_set.add_or_del = 2
                 graph_set.invalid = False
                 graph_set.txt = TextInput('eg. 1  2')
+            if 470 > mouse[0] > 40 and 510 > mouse[1] > 460:
+                graph_set.status = 2
+            if 470 > mouse[0] > 40 and 590 > mouse[1] > 540:
+                graph_set.status = 3
+            if 470 > mouse[0] > 40 and 670 > mouse[1] > 620:
+                graph_set.status = 4
             
 
         if event.type == pygame.MOUSEBUTTONDOWN:
@@ -378,5 +460,7 @@ def Menu(graph_set, screen):
         draw_input(graph_set, screen)
     if graph_set.invalid == True:
         draw_invalid(graph_set, screen)
+
+    draw_buttons(screen)
 
     check_button(graph_set, screen)
