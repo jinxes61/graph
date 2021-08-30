@@ -3,6 +3,15 @@ import pygame.locals as pl
 
 pygame.font.init()
 
+def getNum(key):
+    if key[pl.K_SPACE]:
+        return ' '
+
+    zer = ord('0')
+    for i in range (pl.K_0, pl.K_9 + 1):
+        if key[i] == True:
+            return chr(zer + i - pl.K_0)
+    return ''
 
 class TextInput:
     """
@@ -62,56 +71,55 @@ class TextInput:
         self.cursor_ms_counter = 0
 
         self.clock = pygame.time.Clock()
+        self.key_clock = pygame.time.Clock()
+        self.key_interval = 20
+        self.key_counter = 0
 
     def update(self, events):
-        for event in events:
-            if event.type == pygame.KEYDOWN:
-                self.cursor_visible = True  # So the user sees where he writes
+        if self.key_counter < self.key_interval:
+            self.key_counter += 1
+        else:
+            self.key_counter = 0
 
-                # If none exist, create counter for that key:
-                if event.key not in self.keyrepeat_counters:
-                    if not event.key == pl.K_RETURN: # Filters out return key, others can be added as necessary
-                        self.keyrepeat_counters[event.key] = [0, event.unicode]
+            key = pygame.key.get_pressed()
+            # If none exist, create counter for that key:
+            # if event.key not in self.keyrepeat_counters:
+            #     if not event.key == pl.K_RETURN: # Filters out return key, others can be added as necessary
+            #         self.keyrepeat_counters[event.key] = [0, event.unicode]
 
-                if event.key == pl.K_BACKSPACE:
-                    self.input_string = (
-                        self.input_string[:max(self.cursor_position - 1, 0)]
-                        + self.input_string[self.cursor_position:]
-                    )
+            if key[pl.K_BACKSPACE] == True:
+                self.input_string = (
+                    self.input_string[:max(self.cursor_position - 1, 0)]
+                    + self.input_string[self.cursor_position:]
+                )
 
-                    # Subtract one from cursor_pos, but do not go below zero:
-                    self.cursor_position = max(self.cursor_position - 1, 0)
-                elif event.key == pl.K_DELETE:
-                    self.input_string = (
-                        self.input_string[:self.cursor_position]
-                        + self.input_string[self.cursor_position + 1:]
-                    )
+                # Subtract one from cursor_pos, but do not go below zero:
+                self.cursor_position = max(self.cursor_position - 1, 0)
 
-                elif event.key == pl.K_RETURN:
-                    return True
+            elif key[pl.K_RETURN] == True:
+                return True
 
-                elif event.key == pl.K_RIGHT:
-                    # Add one to cursor_pos, but do not exceed len(input_string)
-                    self.cursor_position = min(self.cursor_position + 1, len(self.input_string))
+            elif key[pl.K_RIGHT] == True:
+                # Add one to cursor_pos, but do not exceed len(input_string)
+                self.cursor_position = min(self.cursor_position + 1, len(self.input_string))
 
-                elif event.key == pl.K_LEFT:
-                    # Subtract one from cursor_pos, but do not go below zero:
-                    self.cursor_position = max(self.cursor_position - 1, 0)
+            elif key[pl.K_LEFT] == True:
+                # Subtract one from cursor_pos, but do not go below zero:
+                self.cursor_position = max(self.cursor_position - 1, 0)
 
-                elif event.key == pl.K_END:
-                    self.cursor_position = len(self.input_string)
-
-                elif event.key == pl.K_HOME:
-                    self.cursor_position = 0
-
-                elif len(self.input_string) < self.max_string_length or self.max_string_length == -1:
-                    # If no special key is pressed, add unicode of key to input_string
+            elif len(self.input_string) < self.max_string_length or self.max_string_length == -1:
+                # If no special key is pressed, add unicode of key to input_string
+                s = getNum(key)
+                if (len(s) > 0):
                     self.input_string = (
                         self.input_string[:self.cursor_position]
-                        + event.unicode
+                        + s
                         + self.input_string[self.cursor_position:]
                     )
-                    self.cursor_position += len(event.unicode)  # Some are empty, e.g. K_UP
+                    self.cursor_position += len(s)  # Some are empty, e.g. K_UP
+                else:
+                    self.key_counter = self.key_interval
+
 
 
         # Update key counters:
@@ -130,8 +138,7 @@ class TextInput:
 
         # Re-render text surface:
         string = self.input_string
-        if self.password:
-            string = "*" * len(self.input_string)
+
         self.surface = self.font_object.render(string, self.antialias, self.text_color)
 
         # Update self.cursor_visible

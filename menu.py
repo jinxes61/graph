@@ -189,6 +189,18 @@ def draw_nodes(graph_set, screen):
         screen.blit(text, text_rect)
 
 
+def get_shorten_pos(pos1, pos2, r):
+    x = pos2[0] - pos1[0]
+    y = pos2[1] - pos1[1]
+    l = (x * x + y * y) ** 0.5
+    x = x * 20 / l;
+    y = y * 20 / l;
+    ans = []
+    ans.append((pos1[0] + x, pos1[1] + y))
+    ans.append((pos2[0] - x, pos2[1] - y))
+    return ans
+
+
 # draw the edges between nodes
 def draw_edges(graph_set, screen):
     col = (220, 220, 220)
@@ -199,7 +211,8 @@ def draw_edges(graph_set, screen):
             if xylength(nodes_pos[i]['x'], nodes_pos[i]['y'], nodes_pos[num]['x'], nodes_pos[num]['y']) > 400:
                 pos1 = (nodes_pos[i]['x'], nodes_pos[i]['y'])
                 pos2 = (nodes_pos[num]['x'], nodes_pos[num]['y'])
-                pygame.draw.aaline(screen, col, pos1, pos2, 1)
+                pos = get_shorten_pos(pos1, pos2, graph_set.node_r)
+                pygame.draw.aaline(screen, col, pos[0], pos[1], 1)
 
 
     return
@@ -249,9 +262,14 @@ def strToNum(s):
 
 # action:add an edge
 def addEdge(graph_set, screen, numbers):
-    if (len(numbers) != 3):
+    if len(numbers) != 3:
         graph_set.invalid = True
         return
+
+    if numbers[1] >= graph_set.node_num or numbers[0] >= graph_set.node_num:
+        graph_set.invalid = True
+        return
+
     for i in graph_set.nodes_edges[numbers[0]]:
         if i['to'] == numbers[1]:
             graph_set.invalid = True
@@ -266,6 +284,10 @@ def addEdge(graph_set, screen, numbers):
 # action del an edge
 def delEdge(graph_set, screen, numbers):
     if (len(numbers) != 2):
+        graph_set.invalid = True
+        return
+
+    if numbers[1] >= graph_set.node_num or numbers[0] >= graph_set.node_num:
         graph_set.invalid = True
         return
 
