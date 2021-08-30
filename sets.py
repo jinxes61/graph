@@ -30,3 +30,7 @@ class Settings:
         self.add_or_del = 0
         self.txt = TextInput()
         self.invalid = False
+
+        #sets of AdjacentList
+        self.adjList_pos = (100, 100, 880, 560)
+        self.edge_len = 20

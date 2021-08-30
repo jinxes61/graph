@@ -3,6 +3,7 @@ import sys
 import stars
 import welcome
 import menu
+import adjList
 from sets import Settings
 
 def check_event(graph_set, screen):
@@ -22,6 +23,8 @@ def upd_screen(graph_set, screen, img):
         welcome.wel(graph_set, screen)
     elif graph_set.status == 1:
         menu.Menu(graph_set, screen)
+    elif graph_set.status == 2:
+        adjList.AdjList(graph_set, screen)
 
     pygame.display.flip()
 
