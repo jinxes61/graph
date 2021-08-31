@@ -439,7 +439,28 @@ def check_button(graph_set, screen):
                 graph_set.choose_flag = 0
             if 470 > mouse[0] > 40 and 670 > mouse[1] > 620:
                 graph_set.status = 4
-            
+                graph_set.display_SP = 0
+                for i in range(0, graph_set.node_num):
+                    graph_set.floyd_dis.append([])
+                    for j in range(0, graph_set.node_num):
+                        graph_set.floyd_dis[i].append(graph_set.inf)
+                    
+                    graph_set.floyd_dis[i][i] = 0
+                    for j in graph_set.nodes_edges[i]:
+                        graph_set.floyd_dis[i][j['to']] = j['len'] + 1
+                graph_set.floyd_k = 1
+                graph_set.floyd_i = 1
+                graph_set.floyd_j = 2
+                graph_set.floyd_finish = False
+                
+                graph_set.dij_start = -1
+                graph_set.dij_node_dis.clear()
+                for i in range(0, graph_set.node_num):
+                    graph_set.dij_node_dis.append(graph_set.inf)
+                graph_set.dij_choose.clear()
+                graph_set.dij_finish = False
+                graph_set.txt = TextInput('', max_string_length = 1)
+                
 
         if event.type == pygame.MOUSEBUTTONDOWN:
             for i in nodes_pos:

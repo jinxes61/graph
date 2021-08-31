@@ -5,6 +5,7 @@ import welcome
 import menu
 import adjList
 import mst
+import short_path
 from sets import Settings
 
 def check_event(graph_set, screen):
@@ -28,6 +29,8 @@ def upd_screen(graph_set, screen, img):
         adjList.AdjList(graph_set, screen)
     elif graph_set.status == 3:
         mst.Mst(graph_set, screen)
+    elif graph_set.status == 4:
+        short_path.Short_path(graph_set, screen)
 
     pygame.display.flip()
 

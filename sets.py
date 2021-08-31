@@ -48,3 +48,16 @@ class Settings:
         self.check_edge = []
         self.fa = []
         self.choose_flag = 0
+
+        #sets of short_path
+        self.display_SP = 0
+        self.floyd_dis = []
+        self.floyd_k = 0
+        self.floyd_i = 0
+        self.floyd_j = 0
+        self.floyd_finish = False
+
+        self.dij_start = -1
+        self.dij_node_dis = []
+        self.dij_choose = []
+        self.dij_finish = False

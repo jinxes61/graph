@@ -143,6 +143,7 @@ def prim(graph_set, screen):
         chosen_edges.append(temp)
     else:
         graph_set.prim_connected = False
+        return
 
 
 def find(x, graph_set):
