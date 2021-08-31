@@ -72,7 +72,7 @@ class TextInput:
 
         self.clock = pygame.time.Clock()
         self.key_clock = pygame.time.Clock()
-        self.key_interval = 20
+        self.key_interval = 10
         self.key_counter = 0
 
     def update(self, events):

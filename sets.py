@@ -34,3 +34,17 @@ class Settings:
         #sets of AdjacentList
         self.adjList_pos = (100, 100, 880, 560)
         self.edge_len = 20
+
+        #sets of mst
+        self.inf = 1000000000
+        self.display_mst = 0
+        self.display_interval = 200
+        self.display_count = 0
+        self.prim_dis = (120, 50)
+        self.prim_node_dis = []
+        self.prim_connected = True
+
+        self.edge_li = []
+        self.check_edge = []
+        self.fa = []
+        self.choose_flag = 0

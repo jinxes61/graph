@@ -43,15 +43,6 @@ def back_button(graph_set, screen):
     text_rect.centery = 50
     screen.blit(text, text_rect)
 
-    events = pygame.event.get()
-    for event in events:
-        if event.type == pygame.QUIT:
-            sys.exit()
-
-        if event.type == pygame.MOUSEBUTTONUP:
-            if 180 > mouse[0] > 30 and 75 > mouse[1] > 25:
-                graph_set.status = 1
-
 
 def draw_node(screen, num, x, y):
     col = (220, 220, 220)
@@ -135,7 +126,19 @@ def draw_list(graph_set, screen):
             lst[i - 1] = draw_edge(screen, num1 + 1, num2 + 1, xx, yy, lx)
 
 
+def check_button(graph_set, screen):
+    mouse = pygame.mouse.get_pos()
+    events = pygame.event.get()
+    for event in events:
+        if event.type == pygame.QUIT:
+            sys.exit()
+
+        if event.type == pygame.MOUSEBUTTONUP:
+            if 180 > mouse[0] > 30 and 75 > mouse[1] > 25:
+                graph_set.status = 1
+
 def AdjList(graph_set, screen):
     draw_al_bg(graph_set, screen)
     back_button(graph_set, screen)
     draw_list(graph_set, screen)
+    check_button(graph_set, screen)

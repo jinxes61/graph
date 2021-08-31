@@ -169,6 +169,10 @@ def delAllEdges(graph_set, x):
 
 # draw the nodes on the graph
 nodes_pos = []
+
+def get_nodes_pos():
+    return nodes_pos
+
 def draw_nodes(graph_set, screen):
     # num of nodes should be the same with setting
     graph_bg = graph_set.graph_bg
@@ -419,6 +423,20 @@ def check_button(graph_set, screen):
                 graph_set.status = 2
             if 470 > mouse[0] > 40 and 590 > mouse[1] > 540:
                 graph_set.status = 3
+                graph_set.display_mst = 0
+                for i in range(0, graph_set.node_num):
+                    graph_set.prim_node_dis.append(graph_set.inf)
+                    graph_set.fa.append(i)
+                graph_set.prim_node_dis[0] = -1
+                graph_set.prim_connected = True
+                graph_set.edge_li.clear()
+                for i in range(0, graph_set.node_num):
+                    for j in graph_set.nodes_edges[i]:
+                        if (i < j['to']):
+                            graph_set.edge_li.append([i, j['to'], j['len']])
+                graph_set.edge_li.sort(key = lambda s:s[2])
+                graph_set.check_edge = (-1, -1)
+                graph_set.choose_flag = 0
             if 470 > mouse[0] > 40 and 670 > mouse[1] > 620:
                 graph_set.status = 4
             
